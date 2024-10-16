@@ -138,15 +138,15 @@ G_GNUC_END_IGNORE_DEPRECATIONS
 }
 
 static void draw_text (GtkWidget * widget, cairo_t * cr, int x, int y, int
- width, float r, float g, float b, float a, const char * font,
- const char * text)
+ width, float r, float g, float b, float a, int font_size, const char * text)
 {
     cairo_move_to (cr, x, y);
     cairo_set_source_rgba (cr, r, g, b, a);
 
-    PangoFontDescription * desc = pango_font_description_from_string (font);
-    PangoLayout * pl = gtk_widget_create_pango_layout (widget, nullptr);
-    pango_layout_set_text (pl, text, -1);
+    PangoFontDescription * desc = pango_font_description_new ();
+    pango_font_description_set_size (desc, font_size * PANGO_SCALE);
+
+    PangoLayout * pl = gtk_widget_create_pango_layout (widget, text);
     pango_layout_set_font_description (pl, desc);
     pango_font_description_free (desc);
     pango_layout_set_width (pl, width * PANGO_SCALE);
@@ -233,22 +233,22 @@ static void draw_title (cairo_t * cr)
 
     if (area->title)
         draw_text (area->main, cr, x, SPACING, width, 1, 1, 1, area->alpha,
-         "18", area->title);
+         18, area->title);
     if (area->last_title)
         draw_text (area->main, cr, x, SPACING, width, 1, 1, 1, area->last_alpha,
-         "18", area->last_title);
+         18, area->last_title);
     if (area->artist)
         draw_text (area->main, cr, x, SPACING + y_offset1, width, 1, 1, 1,
-         area->alpha, "9", area->artist);
+         area->alpha, 9, area->artist);
     if (area->last_artist)
         draw_text (area->main, cr, x, SPACING + y_offset1, width, 1, 1, 1,
-         area->last_alpha, "9", area->last_artist);
+         area->last_alpha, 9, area->last_artist);
     if (area->album)
         draw_text (area->main, cr, x, SPACING + y_offset2, width, 0.7,
-         0.7, 0.7, area->alpha, "9", area->album);
+         0.7, 0.7, area->alpha, 9, area->album);
     if (area->last_album)
         draw_text (area->main, cr, x, SPACING + y_offset2, width, 0.7,
-         0.7, 0.7, area->last_alpha, "9", area->last_album);
+         0.7, 0.7, area->last_alpha, 9, area->last_album);
 }
 
 #ifdef USE_GTK3

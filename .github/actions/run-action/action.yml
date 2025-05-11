@@ -19,6 +19,9 @@ runs:
     - run: '$GITHUB_ACTION_PATH/run-action.sh "${{ inputs.action }}" "${{ inputs.os }}" "${{ inputs.build-system }}"'
       if: (!startsWith(inputs.os, 'windows'))
       shell: bash
+      env:
+        CC: clang
+        CXX: clang++
 
     - run: '$GITHUB_ACTION_PATH/run-action.sh "${{ inputs.action }}" "${{ inputs.os }}" "${{ inputs.build-system }}"'
       if: startsWith(inputs.os, 'windows')

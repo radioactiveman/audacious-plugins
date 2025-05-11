@@ -47,7 +47,7 @@ case "$action" in
         if [ "$build_system" = 'meson' ]; then
           meson setup build -D qt5=true -D gtk=false -D mac-media-keys=true
         else
-          ./autogen.sh && ./configure --enable-qt5 --disable-gtk --enable-mac-media-keys
+          autoreconf -I "/usr/local/share/gettext/m4" && ./configure --enable-qt5 --disable-gtk --enable-mac-media-keys
         fi
         ;;
 
@@ -58,7 +58,13 @@ case "$action" in
         if [ "$build_system" = 'meson' ]; then
           meson setup build -D gtk=false -D mac-media-keys=true
         else
-          ./autogen.sh && ./configure --disable-gtk --enable-mac-media-keys
+          brew remove gcc@12
+          brew remove gcc@13
+          brew remove gcc@14
+
+          export LDFLAGS="-L/opt/homebrew/opt/libiconv/lib"
+          export CPPFLAGS="-I/opt/homebrew/opt/libiconv/include"
+          autoreconf -I "/opt/homebrew/opt/gettext/share/gettext/m4" && ./configure --disable-gtk --enable-mac-media-keys
         fi
         ;;
 
